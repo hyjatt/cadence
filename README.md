@@ -1,27 +1,57 @@
-# Laravel + React Starter Kit
+# Cadence
 
-## Introduction
+Cadence is a full-stack student planner for keeping assignments, projects, exams, and deadlines in one focused workspace. Students can organize work by subject, search and filter their workload, mark work complete, and follow their progress from a responsive dashboard.
 
-Our React starter kit provides a robust, modern starting point for building Laravel applications with a React frontend using [Inertia](https://inertiajs.com).
+## Stack
 
-Inertia allows you to build modern, single-page React applications using classic server-side routing and controllers. This lets you enjoy the frontend power of React combined with the incredible backend productivity of Laravel and lightning-fast Vite compilation.
+- Laravel 13 and PHP 8.4
+- React 19, TypeScript, and Inertia 3
+- Tailwind CSS 4 and Vite
+- MySQL 8+
 
-This React starter kit utilizes React 19, TypeScript, Tailwind, and the [shadcn/ui](https://ui.shadcn.com) and [radix-ui](https://www.radix-ui.com) component libraries.
+## Local setup
 
-## Official Documentation
+Requirements: PHP 8.3+, Composer, Node.js 22+, npm, and MySQL 8+.
 
-Documentation for all Laravel starter kits can be found on the [Laravel website](https://laravel.com/docs/starter-kits).
+```bash
+composer install
+npm install
+cp .env.example .env
+php artisan key:generate
+```
 
-## Contributing
+Create the application and test databases, then update the MySQL credentials in `.env`:
 
-Thank you for considering contributing to our starter kit! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```sql
+CREATE DATABASE cadence CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE cadence_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
 
-All contributions to the Starter Kits from now on should be made through [Maestro](https://github.com/laravel/maestro).
+Finish setup and start both development servers:
 
-## Code of Conduct
+```bash
+php artisan migrate --seed
+composer dev
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+The seeded demo account is `student@cadence.test` with password `password`.
 
-## License
+## Quality checks
 
-The Laravel + React starter kit is open-sourced software licensed under the MIT license.
+```bash
+composer test
+npm run check
+npm run types:check
+npm run build
+```
+
+The GitHub Actions workflow runs the backend and frontend checks using MySQL on every push to `main` and on pull requests.
+
+## Core routes
+
+- `/` — public landing page
+- `/dashboard` — progress and upcoming deadlines
+- `/work-items` — searchable and filterable planner
+- `/subjects` — color-coded subject management
+
+Cadence uses Laravel's session authentication and email verification. Every subject and work item is scoped to its owner on the server.
