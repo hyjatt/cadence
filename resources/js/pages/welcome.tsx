@@ -6,7 +6,10 @@ import {
     CalendarDays,
     Check,
     ChevronRight,
+    Code2,
     Clock3,
+    GraduationCap,
+    Lightbulb,
     Search,
     Sparkles,
 } from 'lucide-react';
@@ -52,8 +55,8 @@ export default function Welcome() {
                     content="Cadence keeps assignments, projects, exams, and deadlines moving in one focused student planner."
                 />
             </Head>
-            <div className="min-h-screen overflow-hidden bg-[#f7f9fd] text-[#0a1733] dark:bg-[#061127] dark:text-slate-50">
-                <header className="relative z-20 border-b border-slate-200/70 bg-white/75 backdrop-blur-xl dark:border-white/10 dark:bg-[#061127]/75">
+            <div className="min-h-screen overflow-x-clip bg-[#f7f9fd] text-[#0a1733] dark:bg-[#061127] dark:text-slate-50">
+                <header className="sticky top-0 z-50 border-b border-slate-200/70 bg-white/85 shadow-sm shadow-slate-900/5 backdrop-blur-xl dark:border-white/10 dark:bg-[#061127]/85 dark:shadow-black/10">
                     <nav
                         className="mx-auto flex h-18 max-w-7xl items-center justify-between px-5 sm:px-8"
                         aria-label="Main navigation"
@@ -76,6 +79,9 @@ export default function Welcome() {
                                 className="hover:text-blue-600"
                             >
                                 How it works
+                            </a>
+                            <a href="#about" className="hover:text-blue-600">
+                                About me
                             </a>
                         </div>
                         <div className="flex items-center gap-2">
@@ -240,7 +246,7 @@ export default function Welcome() {
 
                     <section
                         id="features"
-                        className="bg-white px-5 py-24 sm:px-8 dark:bg-[#0a1730]"
+                        className="scroll-mt-18 bg-white px-5 py-24 sm:px-8 dark:bg-[#0a1730]"
                     >
                         <div className="mx-auto max-w-7xl">
                             <div className="max-w-2xl">
@@ -281,7 +287,10 @@ export default function Welcome() {
                         </div>
                     </section>
 
-                    <section id="how-it-works" className="px-5 py-24 sm:px-8">
+                    <section
+                        id="how-it-works"
+                        className="scroll-mt-18 px-5 py-24 sm:px-8"
+                    >
                         <div className="mx-auto max-w-7xl">
                             <div className="text-center">
                                 <p className="text-sm font-bold tracking-[0.16em] text-blue-600 uppercase">
@@ -307,6 +316,84 @@ export default function Welcome() {
                                     title="Complete"
                                     text="Mark work done and watch steady effort become visible progress."
                                 />
+                            </div>
+                        </div>
+                    </section>
+
+                    <section
+                        id="about"
+                        className="scroll-mt-18 bg-white px-5 py-24 sm:px-8 dark:bg-[#0a1730]"
+                    >
+                        <div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
+                            <div className="relative mx-auto w-full max-w-sm lg:mx-0">
+                                <div className="absolute -inset-4 rounded-[2rem] bg-gradient-to-br from-blue-500/20 to-violet-500/15 blur-2xl" />
+                                <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-[#081a3a] p-4 shadow-2xl shadow-slate-900/15 dark:border-white/10">
+                                    <div
+                                        className="relative grid aspect-[9/16] place-items-center overflow-hidden rounded-2xl bg-gradient-to-br from-blue-500 via-blue-600 to-violet-600 text-white"
+                                        role="img"
+                                        aria-label="Portrait of Izzat Azri Zafaruddin"
+                                    >
+                                        <div className="text-center">
+                                            <span className="text-7xl font-bold tracking-[-0.06em] sm:text-8xl">
+                                                IAZ
+                                            </span>
+                                            <p className="mt-4 text-sm font-semibold tracking-[0.18em] text-blue-100 uppercase">
+                                                Creator of Cadence
+                                            </p>
+                                        </div>
+                                        <img
+                                            src="/images/izzat-azri-zafaruddin.jpg"
+                                            alt="Izzat Azri Zafaruddin, creator of Cadence"
+                                            className="absolute inset-0 size-full object-cover object-center"
+                                            loading="lazy"
+                                            width="900"
+                                            height="1600"
+                                            onError={(event) =>
+                                                event.currentTarget.classList.add(
+                                                    'hidden',
+                                                )
+                                            }
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <p className="text-sm font-bold tracking-[0.16em] text-blue-600 uppercase">
+                                    About me
+                                </p>
+                                <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
+                                    Meet Izzat Azri Zafaruddin.
+                                </h2>
+                                <p className="mt-6 text-lg leading-8 text-slate-600 dark:text-slate-300">
+                                    I am a Computer Science diploma student at
+                                    Universiti Teknologi MARA (UiTM) Segamat and
+                                    the creator of Cadence, a task management
+                                    and to-do list platform built specifically
+                                    for students. Driven by an interest in
+                                    building practical digital tools and
+                                    optimizing daily workflows, I designed
+                                    Cadence to help students organize their
+                                    academic workloads, meet deadlines, and
+                                    bring clarity to everyday student life.
+                                </p>
+                                <div className="mt-8 grid gap-4 sm:grid-cols-3">
+                                    <AboutFact
+                                        icon={GraduationCap}
+                                        title="Student"
+                                        text="Diploma in Computer Science at UiTM Segamat."
+                                    />
+                                    <AboutFact
+                                        icon={Code2}
+                                        title="Developer"
+                                        text="Creator and developer of Cadence."
+                                    />
+                                    <AboutFact
+                                        icon={Lightbulb}
+                                        title="Builder"
+                                        text="Focused on useful, lightweight digital tools."
+                                    />
+                                </div>
                             </div>
                         </div>
                     </section>
@@ -412,5 +499,25 @@ function Step({
                 {text}
             </p>
         </article>
+    );
+}
+
+function AboutFact({
+    icon: Icon,
+    title,
+    text,
+}: {
+    icon: typeof GraduationCap;
+    title: string;
+    text: string;
+}) {
+    return (
+        <div className="rounded-2xl border border-slate-200 bg-[#f7f9fd] p-4 dark:border-white/10 dark:bg-white/5">
+            <Icon className="size-5 text-blue-600" />
+            <h3 className="mt-3 font-bold">{title}</h3>
+            <p className="mt-1 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                {text}
+            </p>
+        </div>
     );
 }
