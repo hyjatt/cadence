@@ -1,5 +1,12 @@
-import { Link } from '@inertiajs/react';
-import { BookOpen, LayoutGrid, LibraryBig, ListTodo } from 'lucide-react';
+import { Link, usePage } from '@inertiajs/react';
+import {
+    BookOpen,
+    Folder,
+    LayoutGrid,
+    ListTodo,
+    Trophy,
+    Users,
+} from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -22,8 +29,11 @@ const mainNavItems: NavItem[] = [
         href: dashboard(),
         icon: LayoutGrid,
     },
-    { title: 'Work items', href: '/work-items', icon: ListTodo },
-    { title: 'Subjects', href: '/subjects', icon: LibraryBig },
+    { title: 'Tasks', href: '/tasks', icon: ListTodo },
+    { title: 'Categories', href: '/categories', icon: Folder },
+    { title: 'Groups', href: '/groups', icon: Users },
+    { title: 'Leaderboard', href: '/leaderboard', icon: Trophy },
+    { title: 'Friends', href: '/friends', icon: Users },
 ];
 
 const footerNavItems: NavItem[] = [
@@ -35,6 +45,8 @@ const footerNavItems: NavItem[] = [
 ];
 
 export function AppSidebar() {
+    const { social } = usePage<{ social: { pending_social_count: number } }>()
+        .props;
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
@@ -50,7 +62,13 @@ export function AppSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
-                <NavMain items={mainNavItems} />
+                <NavMain
+                    items={mainNavItems.map((item) =>
+                        item.title === 'Friends'
+                            ? { ...item, badge: social.pending_social_count }
+                            : item,
+                    )}
+                />
             </SidebarContent>
 
             <SidebarFooter>

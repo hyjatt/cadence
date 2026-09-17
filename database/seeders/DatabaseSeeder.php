@@ -2,9 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Subject;
+use App\Models\Category;
+use App\Models\Tag;
 use App\Models\User;
-use App\Models\WorkItem;
+use App\Models\Task;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -18,26 +19,34 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $user = User::factory()->create([
-            'name' => 'Avery Student',
-            'email' => 'student@cadence.test',
+            'name' => 'Avery Morgan',
+            'email' => 'avery@cadence.test',
         ]);
 
         collect([
-            ['Mathematics', '#2563EB'],
-            ['Computer Science', '#7C3AED'],
-            ['Chemistry', '#059669'],
-            ['English', '#DB2777'],
-        ])->each(function (array $subjectData) use ($user) {
-            $subject = Subject::factory()->create([
+            ['Work', '#2563EB'],
+            ['Personal', '#7C3AED'],
+            ['Health', '#059669'],
+            ['Home', '#EA580C'],
+        ])->each(function (array $categoryData) use ($user) {
+            $category = Category::factory()->create([
                 'user_id' => $user->id,
-                'name' => $subjectData[0],
-                'color' => $subjectData[1],
+                'name' => $categoryData[0],
+                'color' => $categoryData[1],
             ]);
 
-            WorkItem::factory()->count(3)->create([
+            Task::factory()->count(3)->create([
                 'user_id' => $user->id,
-                'subject_id' => $subject->id,
+                'category_id' => $category->id,
             ]);
         });
+
+        $tags = collect(['Important', 'Quick win', 'Errand', 'Planning'])->map(
+            fn (string $name) => Tag::factory()->create(['user_id' => $user->id, 'name' => $name]),
+        );
+
+        $user->tasks()->each(fn (Task $task) => $task->tags()->sync(
+            $tags->shuffle()->take(random_int(0, 2))->pluck('id'),
+        ));
     }
 }

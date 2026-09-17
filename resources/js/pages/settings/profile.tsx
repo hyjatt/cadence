@@ -55,6 +55,46 @@ export default function Profile(
                     {({ processing, errors }) => (
                         <>
                             <div className="grid gap-2">
+                                <Label htmlFor="username">Username</Label>
+
+                                <Input
+                                    id="username"
+                                    className="mt-1 block w-full"
+                                    defaultValue={auth.user.username ?? ''}
+                                    name="username"
+                                    autoComplete="nickname"
+                                    placeholder="e.g. izzat_azri"
+                                />
+
+                                <p className="text-muted-foreground text-sm">
+                                    Use this to add friends. Only opted-in users
+                                    appear on leaderboards.
+                                </p>
+                                <InputError
+                                    className="mt-2"
+                                    message={errors.username}
+                                />
+                            </div>
+
+                            <label className="flex items-center gap-3 rounded-lg border p-3 text-sm">
+                                <input
+                                    type="hidden"
+                                    name="leaderboard_opt_in"
+                                    value="0"
+                                />
+                                <input
+                                    type="checkbox"
+                                    name="leaderboard_opt_in"
+                                    value="1"
+                                    defaultChecked={
+                                        auth.user.leaderboard_opt_in ?? false
+                                    }
+                                />
+                                Join the public leaderboard with my name,
+                                username, level, XP, and streak.
+                            </label>
+
+                            <div className="grid gap-2">
                                 <Label htmlFor="name">Name</Label>
 
                                 <Input

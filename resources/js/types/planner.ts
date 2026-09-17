@@ -1,20 +1,53 @@
-export type Subject = {
+export type Category = {
     id: number;
     name: string;
     color: string;
-    work_items_count?: number;
+    tasks_count?: number;
+    user_id?: number;
+    members?: SocialPerson[];
 };
 
-export type WorkItem = {
+export type Tag = {
     id: number;
-    subject_id: number;
-    type: 'assignment' | 'project' | 'exam';
+    name: string;
+};
+
+export type PlannerGroup = {
+    id: number;
+    name: string;
+    color: string;
+};
+
+export type Task = {
+    id: number;
+    category_id: number | null;
+    group_id: number | null;
     title: string;
     description: string | null;
-    due_at: string;
+    due_at: string | null;
     completed_at: string | null;
     status: 'pending' | 'overdue' | 'completed';
-    subject: Subject;
+    category: Category | null;
+    group: PlannerGroup | null;
+    tags: Tag[];
+    members?: SocialPerson[];
+    can_edit?: boolean;
+    can_delete?: boolean;
+};
+
+export type SocialPerson = {
+    id: number;
+    name: string;
+    username: string | null;
+};
+
+export type LeaderboardEntry = SocialPerson & {
+    rank: number;
+    level: number;
+    levelName: string;
+    xp: number;
+    streak: number;
+    relationship: 'self' | 'friends' | 'none';
 };
 
 export type Stats = {
@@ -23,8 +56,23 @@ export type Stats = {
     pending: number;
     overdue: number;
     completionRate: number;
-    byType: Record<
-        WorkItem['type'],
-        { total: number; completed: number; rate: number }
-    >;
+    byCategory: Array<{
+        id: number;
+        name: string;
+        color: string;
+        total: number;
+        completed: number;
+        rate: number;
+    }>;
+};
+
+export type Gamification = {
+    currentStreak: number;
+    completedToday: number;
+    xp: number;
+    level: number;
+    levelName: string;
+    xpIntoLevel: number;
+    xpToNextLevel: number;
+    progress: number;
 };

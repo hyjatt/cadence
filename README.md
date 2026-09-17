@@ -1,6 +1,6 @@
 # Cadence
 
-Cadence is a full-stack student planner for keeping assignments, projects, exams, and deadlines in one focused workspace. Students can organize work by subject, search and filter their workload, mark work complete, and follow their progress from a responsive dashboard.
+Cadence is a full-stack planner for keeping tasks, priorities, and deadlines in one focused workspace. Anyone can organize work, home life, health, personal projects, and more with optional categories, reusable tags, and a responsive progress dashboard.
 
 ## Stack
 
@@ -34,7 +34,7 @@ php artisan migrate --seed
 composer dev
 ```
 
-The seeded demo account is `student@cadence.test` with password `password`.
+The local seeded demo account is `avery@cadence.test` with password `password`.
 
 ## Quality checks
 
@@ -51,7 +51,7 @@ The GitHub Actions workflow runs the backend and frontend checks using MySQL on 
 
 - `/` — public landing page
 - `/dashboard` — progress and upcoming deadlines
-- `/work-items` — searchable and filterable planner
-- `/subjects` — color-coded subject management
+- `/tasks` — searchable and filterable task planner
+- `/categories` — optional color-coded category management
 
-Cadence uses Laravel's session authentication and email verification. Every subject and work item is scoped to its owner on the server.
+Cadence uses Laravel's session authentication and email verification. Every category, tag, and task is scoped to its owner on the server.

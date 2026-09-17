@@ -23,9 +23,25 @@ export function NavMain({ items }: { items: NavItem[] }) {
                             isActive={isCurrentUrl(item.href)}
                             tooltip={{ children: item.title }}
                         >
-                            <Link href={item.href} prefetch>
+                            <Link
+                                href={item.href}
+                                prefetch
+                                aria-label={
+                                    item.badge
+                                        ? `${item.title}: ${item.badge} pending notifications`
+                                        : item.title
+                                }
+                            >
                                 {item.icon && <item.icon />}
                                 <span>{item.title}</span>
+                                {item.badge ? (
+                                    <span
+                                        aria-hidden="true"
+                                        className="ml-auto grid size-5 place-items-center rounded-full bg-rose-500 text-[10px] font-bold text-white"
+                                    >
+                                        {item.badge > 9 ? '9+' : item.badge}
+                                    </span>
+                                ) : null}
                             </Link>
                         </SidebarMenuButton>
                     </SidebarMenuItem>

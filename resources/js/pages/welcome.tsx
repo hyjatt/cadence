@@ -18,27 +18,27 @@ import { dashboard, login, register } from '@/routes';
 
 const sampleItems = [
     {
-        title: 'Calculus problem set',
-        subject: 'Mathematics',
+        title: 'Send project update',
+        category: 'Work',
         color: '#2563EB',
         due: 'Today · 6:00 PM',
-        type: 'Assignment',
+        type: 'Important',
         done: false,
     },
     {
-        title: 'Database design proposal',
-        subject: 'Computer Science',
+        title: 'Book dentist appointment',
+        category: 'Personal',
         color: '#7C3AED',
         due: 'Tomorrow · 11:59 PM',
-        type: 'Project',
+        type: 'Errand',
         done: false,
     },
     {
-        title: 'Organic chemistry review',
-        subject: 'Chemistry',
+        title: 'Plan weekend meals',
+        category: 'Home',
         color: '#059669',
         due: 'Friday · 9:00 AM',
-        type: 'Exam',
+        type: 'Quick win',
         done: true,
     },
 ];
@@ -49,10 +49,10 @@ export default function Welcome() {
 
     return (
         <>
-            <Head title="Plan your semester">
+            <Head title="Plan your priorities">
                 <meta
                     name="description"
-                    content="Cadence keeps assignments, projects, exams, and deadlines moving in one focused student planner."
+                    content="Cadence keeps tasks, priorities, and deadlines moving in one focused planner."
                 />
             </Head>
             <div className="min-h-screen overflow-x-clip bg-[#f7f9fd] text-[#0a1733] dark:bg-[#061127] dark:text-slate-50">
@@ -120,18 +120,18 @@ export default function Welcome() {
                             <div className="max-w-2xl">
                                 <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3 py-1.5 text-sm font-semibold text-blue-700 dark:border-blue-400/20 dark:bg-blue-400/10 dark:text-blue-300">
                                     <Sparkles className="size-4" />
-                                    Built for the pace of student life
+                                    Built for the pace of everyday life
                                 </div>
                                 <h1 className="text-5xl leading-[1.05] font-bold tracking-[-0.045em] sm:text-6xl lg:text-7xl">
-                                    Keep every deadline in{' '}
+                                    Keep every priority in{' '}
                                     <span className="text-blue-600">
                                         rhythm.
                                     </span>
                                 </h1>
                                 <p className="mt-6 max-w-xl text-lg leading-8 text-slate-600 dark:text-slate-300">
-                                    Cadence brings assignments, projects, and
-                                    exams into one clear view—so you always know
-                                    what needs your attention next.
+                                    Cadence brings work, personal plans, and
+                                    everything in between into one clear view—so
+                                    you always know what needs attention next.
                                 </p>
                                 <div className="mt-9 flex flex-col gap-3 sm:flex-row">
                                     <Link
@@ -177,7 +177,7 @@ export default function Welcome() {
                                             Today’s cadence
                                         </div>
                                         <span className="rounded-lg bg-blue-50 px-3 py-1.5 text-xs font-semibold text-blue-700 dark:bg-blue-400/10 dark:text-blue-300">
-                                            + Add work item
+                                            + Add task
                                         </span>
                                     </div>
                                     <div className="grid grid-cols-3 gap-3 p-5">
@@ -228,7 +228,7 @@ export default function Welcome() {
                                                                         item.color,
                                                                 }}
                                                             />
-                                                            {item.subject} ·{' '}
+                                                            {item.category} ·{' '}
                                                             {item.due}
                                                         </p>
                                                     </div>
@@ -258,8 +258,7 @@ export default function Welcome() {
                                 </h2>
                                 <p className="mt-4 text-lg text-slate-600 dark:text-slate-300">
                                     The essentials you need to stay ahead,
-                                    without turning planning into another
-                                    assignment.
+                                    without turning planning into another chore.
                                 </p>
                             </div>
                             <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
@@ -270,13 +269,13 @@ export default function Welcome() {
                                 />
                                 <Feature
                                     icon={BookOpen}
-                                    title="Organized by subject"
-                                    text="Use clear, color-coded subjects across your entire semester."
+                                    title="Organized your way"
+                                    text="Use optional categories and flexible tags for every part of life."
                                 />
                                 <Feature
                                     icon={Search}
                                     title="Find work quickly"
-                                    text="Search and filter by type, subject, status, or deadline window."
+                                    text="Search and filter by category, tag, status, or due-date window."
                                 />
                                 <Feature
                                     icon={BarChart3}
@@ -297,14 +296,14 @@ export default function Welcome() {
                                     A simple rhythm
                                 </p>
                                 <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
-                                    From syllabus to done.
+                                    From idea to done.
                                 </h2>
                             </div>
                             <div className="mt-14 grid gap-8 md:grid-cols-3">
                                 <Step
                                     number="01"
                                     title="Organize"
-                                    text="Create your subjects and capture every assignment, project, and exam."
+                                    text="Create categories, add tags, and capture every task that matters."
                                 />
                                 <Step
                                     number="02"
@@ -369,13 +368,12 @@ export default function Welcome() {
                                     I am a Computer Science diploma student at
                                     Universiti Teknologi MARA (UiTM) Segamat and
                                     the creator of Cadence, a task management
-                                    and to-do list platform built specifically
-                                    for students. Driven by an interest in
-                                    building practical digital tools and
-                                    optimizing daily workflows, I designed
-                                    Cadence to help students organize their
-                                    academic workloads, meet deadlines, and
-                                    bring clarity to everyday student life.
+                                    and to-do list platform for everyday life
+                                    and work. Driven by an interest in building
+                                    practical digital tools and optimizing daily
+                                    workflows, I designed Cadence to help anyone
+                                    organize priorities, meet deadlines, and
+                                    bring clarity to their day.
                                 </p>
                                 <div className="mt-8 grid gap-4 sm:grid-cols-3">
                                     <AboutFact
@@ -404,13 +402,13 @@ export default function Welcome() {
                             <div className="relative">
                                 <Clock3 className="mx-auto size-9 text-blue-300" />
                                 <h2 className="mt-5 text-3xl font-bold tracking-tight sm:text-4xl">
-                                    Your semester has a rhythm.
+                                    Your day has a rhythm.
                                     <br />
                                     Make it yours.
                                 </h2>
                                 <p className="mx-auto mt-4 max-w-xl text-blue-100/70">
-                                    Start with one subject, add your next
-                                    deadline, and let Cadence keep the rest in
+                                    Start with one task, add a due date when it
+                                    helps, and let Cadence keep the rest in
                                     view.
                                 </p>
                                 <Link
