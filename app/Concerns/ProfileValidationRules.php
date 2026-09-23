@@ -19,7 +19,6 @@ trait ProfileValidationRules
             'name' => $this->nameRules(),
             'email' => $this->emailRules($userId),
             'username' => [$userId === null ? 'required' : 'nullable', 'string', 'min:3', 'max:32', 'regex:/^[A-Za-z0-9_]+$/', Rule::unique(User::class)->ignore($userId)],
-            'leaderboard_opt_in' => ['nullable', 'boolean'],
         ];
     }
 

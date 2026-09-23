@@ -3,7 +3,6 @@ export type User = {
     name: string;
     email: string;
     username?: string | null;
-    leaderboard_opt_in?: boolean;
     avatar?: string;
     email_verified_at: string | null;
     /* @chisel-2fa */

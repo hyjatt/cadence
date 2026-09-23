@@ -15,9 +15,10 @@ class LeaderboardController extends Controller
     {
         $user = $request->user();
         $friendIds = Friendship::friendIdsFor($user);
-        $users = User::query()->where('leaderboard_opt_in', true)->whereNotNull('username')->get();
+        $users = User::all();
         $entries = $users->map(fn (User $candidate) => $this->entry($candidate, $user))->sortByDesc('xp')->sortByDesc('streak')->values()->map(function (array $entry, int $index) {
             $entry['rank'] = $index + 1;
+
             return $entry;
         })->values();
 
@@ -31,6 +32,7 @@ class LeaderboardController extends Controller
     {
         $progress = PlannerProgress::for($candidate);
         $relationship = $candidate->id === $viewer->id ? 'self' : (Friendship::friendIdsFor($viewer)->contains($candidate->id) ? 'friends' : 'none');
+
         return ['id' => $candidate->id, 'name' => $candidate->name, 'username' => $candidate->username, 'level' => $progress['level'], 'levelName' => $progress['levelName'], 'xp' => $progress['xp'], 'streak' => $progress['currentStreak'], 'relationship' => $relationship];
     }
 }

@@ -66,7 +66,10 @@ export default function Leaderboard({
                                         {entry.name}
                                     </span>
                                     <span className="text-muted-foreground text-sm">
-                                        @{entry.username} · Level {entry.level}
+                                        {entry.username
+                                            ? `@${entry.username} · `
+                                            : ''}
+                                        Level {entry.level}
                                     </span>
                                 </span>
                                 <span className="flex items-center gap-3 text-sm">
@@ -83,7 +86,7 @@ export default function Leaderboard({
                         ))
                     ) : (
                         <p className="text-muted-foreground p-10 text-center">
-                            No opted-in players here yet.
+                            No players here yet.
                         </p>
                     )}
                 </section>
@@ -115,9 +118,11 @@ export default function Leaderboard({
                             <h2 className="mt-4 text-xl font-bold">
                                 {selected.name}
                             </h2>
-                            <p className="text-muted-foreground">
-                                @{selected.username}
-                            </p>
+                            {selected.username && (
+                                <p className="text-muted-foreground">
+                                    @{selected.username}
+                                </p>
+                            )}
                             <Badge className="mt-3">
                                 Level {selected.level} · {selected.levelName}
                             </Badge>

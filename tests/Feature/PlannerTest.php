@@ -3,11 +3,11 @@
 namespace Tests\Feature;
 
 use App\Models\Category;
+use App\Models\Friendship;
+use App\Models\PlannerGroup;
 use App\Models\Tag;
 use App\Models\Task;
 use App\Models\User;
-use App\Models\Friendship;
-use App\Models\PlannerGroup;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
@@ -126,16 +126,20 @@ class PlannerTest extends TestCase
         $this->assertSame(25, $friend->xpEvents()->sum('points'));
     }
 
-    public function test_leaderboard_is_opt_in_and_friend_request_is_username_based(): void
+    public function test_every_user_appears_on_the_leaderboard_and_friend_requests_are_username_based(): void
     {
         $viewer = User::factory()->create(['username' => 'viewer']);
-        $public = User::factory()->create(['username' => 'public_player', 'leaderboard_opt_in' => true]);
-        $private = User::factory()->create(['username' => 'private_player']);
+        $friend = User::factory()->create(['username' => 'friend_player', 'leaderboard_opt_in' => true]);
+        $optedOut = User::factory()->create(['username' => 'opted_out_player', 'leaderboard_opt_in' => false]);
+        $withoutUsername = User::factory()->create(['username' => null]);
 
-        $this->actingAs($viewer)->post('/friends', ['username' => '@public_player'])->assertRedirect();
-        $this->assertDatabaseHas('friendships', ['sender_id' => $viewer->id, 'recipient_id' => $public->id, 'status' => 'pending']);
-        $this->actingAs($viewer)->get('/leaderboard')->assertInertia(fn (Assert $page) => $page->component('leaderboard/index')->has('global', 1)->where('global.0.username', 'public_player'));
-        $this->assertDatabaseMissing('friendships', ['recipient_id' => $private->id]);
+        $this->actingAs($viewer)->post('/friends', ['username' => '@friend_player'])->assertRedirect();
+        $this->assertDatabaseHas('friendships', ['sender_id' => $viewer->id, 'recipient_id' => $friend->id, 'status' => 'pending']);
+        $this->actingAs($viewer)->get('/leaderboard')->assertInertia(fn (Assert $page) => $page
+            ->component('leaderboard/index')
+            ->has('global', 4)
+            ->where('global', fn ($entries) => collect($entries)->pluck('id')->sort()->values()->all() === collect([$viewer->id, $friend->id, $optedOut->id, $withoutUsername->id])->sort()->values()->all()));
+        $this->assertDatabaseMissing('friendships', ['recipient_id' => $optedOut->id]);
     }
 
     public function test_groups_use_default_cobalt_and_only_accepted_collaborators_can_work_on_group_tasks(): void
