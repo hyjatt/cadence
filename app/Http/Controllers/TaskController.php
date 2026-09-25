@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TaskRequest;
+use App\Models\Friendship;
+use App\Models\PlannerGroup;
 use App\Models\Tag;
 use App\Models\Task;
 use App\Models\User;
-use App\Models\Friendship;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -80,7 +82,9 @@ class TaskController extends Controller
     {
         abort_unless($task->canCollaborate($request->user()), 403);
         $data = $request->safe()->except(['tags', 'member_ids']);
-        if ($task->user_id !== $request->user()->id) unset($data['category_id'], $data['group_id']);
+        if ($task->user_id !== $request->user()->id) {
+            unset($data['category_id'], $data['group_id']);
+        }
         $task->update($data);
         if ($task->user_id === $request->user()->id) {
             $this->syncTags($task, $request->validated('tags', []));
@@ -105,12 +109,15 @@ class TaskController extends Controller
         abort_unless($task->canCollaborate($request->user()), 403);
         $isCompleting = is_null($task->completed_at);
         $task->update(['completed_at' => $isCompleting ? now() : null]);
-        if ($isCompleting) $this->awardXp($task);
+        if ($isCompleting) {
+            $this->awardXp($task);
+        }
         Inertia::flash('toast', ['type' => 'success', 'message' => $isCompleting ? 'Task completed — +25 XP!' : 'Moved back to pending.']);
 
         return back();
     }
 
+    /** @param array<int, string> $tagNames */
     private function syncTags(Task $task, array $tagNames): void
     {
         $names = collect($tagNames)->map(fn (string $tag) => Str::of($tag)->squish()->trim()->value())->filter()->unique(fn (string $tag) => Str::lower($tag))->take(12);
@@ -118,13 +125,16 @@ class TaskController extends Controller
         $task->tags()->sync($ids);
     }
 
+    /** @param array<int, int|string> $memberIds */
     private function syncMembers(Task $task, User $owner, array $memberIds): void
     {
         $friendIds = Friendship::friendIdsFor($owner);
         $ids = collect($memberIds)->map(fn ($id) => (int) $id)->intersect($friendIds)->values();
         $task->members()->whereNotIn('users.id', $ids)->detach();
         foreach ($ids as $id) {
-            if (! $task->members()->whereKey($id)->exists()) $task->members()->attach($id, ['status' => 'pending']);
+            if (! $task->members()->whereKey($id)->exists()) {
+                $task->members()->attach($id, ['status' => 'pending']);
+            }
         }
     }
 
@@ -140,7 +150,8 @@ class TaskController extends Controller
         ));
     }
 
-    private function friendsFor(User $user)
+    /** @return Collection<int, User> */
+    private function friendsFor(User $user): Collection
     {
         return User::query()->whereIn('id', Friendship::friendIdsFor($user))->orderBy('name')->get(['id', 'name', 'username']);
     }
@@ -150,9 +161,10 @@ class TaskController extends Controller
         abort_unless($task->user_id === $request->user()->id, 403);
     }
 
-    private function collaborativeGroupsFor(User $user)
+    /** @return Collection<int, PlannerGroup> */
+    private function collaborativeGroupsFor(User $user): Collection
     {
-        return \App\Models\PlannerGroup::query()
+        return PlannerGroup::query()
             ->where(fn (Builder $query) => $query->where('user_id', $user->id)->orWhereHas('members', fn (Builder $members) => $members->whereKey($user->id)->where('group_members.status', 'accepted')->whereIn('group_members.role', ['collaborator', 'admin'])))
             ->orderBy('name')
             ->get(['id', 'name', 'color']);

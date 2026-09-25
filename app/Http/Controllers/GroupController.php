@@ -35,6 +35,7 @@ class GroupController extends Controller
         $data = $this->validatedGroupData($request);
         $group = $request->user()->groups()->create(['name' => $data['name']]);
         $this->syncMembers($group, $request->user(), $data['members'] ?? []);
+
         return back();
     }
 
@@ -68,6 +69,7 @@ class GroupController extends Controller
         $data = $this->validatedGroupData($request);
         $group->update(['name' => $data['name']]);
         $this->syncMembers($group, $request->user(), $data['members'] ?? []);
+
         return back();
     }
 
@@ -75,9 +77,11 @@ class GroupController extends Controller
     {
         abort_unless($group->user_id === $request->user()->id, 403);
         $group->delete();
+
         return back();
     }
 
+    /** @param array<int, array{id: int|string, role: string}> $members */
     private function syncMembers(PlannerGroup $group, User $actor, array $members): void
     {
         $existingMembers = $group->members()->get()->keyBy('id');
@@ -95,6 +99,7 @@ class GroupController extends Controller
         }
     }
 
+    /** @return array{name: string, members?: array<int, array{id: int, role: string}>} */
     private function validatedGroupData(Request $request): array
     {
         return $request->validate([
@@ -105,6 +110,7 @@ class GroupController extends Controller
         ]);
     }
 
+    /** @return array<string, mixed> */
     private function groupPayload(PlannerGroup $group, User $viewer): array
     {
         $membership = $group->members->firstWhere('id', $viewer->id)?->pivot;

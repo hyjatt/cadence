@@ -3,13 +3,21 @@
 namespace App\Models;
 
 use Database\Factories\TaskFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 
+/**
+ * @property int $user_id
+ * @property int|null $category_id
+ * @property int|null $group_id
+ * @property Carbon|null $due_at
+ * @property Carbon|null $completed_at
+ * @property PlannerGroup|null $group
+ */
 class Task extends Model
 {
     /** @use HasFactory<TaskFactory> */
@@ -24,27 +32,40 @@ class Task extends Model
 
     protected $appends = ['status'];
 
+    /** @return BelongsTo<User, $this> */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /** @return BelongsTo<Category, $this> */
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
-    public function group(): BelongsTo { return $this->belongsTo(PlannerGroup::class, 'group_id'); }
 
+    /** @return BelongsTo<PlannerGroup, $this> */
+    public function group(): BelongsTo
+    {
+        return $this->belongsTo(PlannerGroup::class, 'group_id');
+    }
+
+    /** @return BelongsToMany<Tag, $this> */
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class)->orderBy('name');
     }
 
+    /** @return BelongsToMany<User, $this> */
     public function members(): BelongsToMany
     {
         return $this->belongsToMany(User::class)->withPivot('status')->withTimestamps();
     }
 
+    /**
+     * @param  Builder<Task>  $query
+     * @return Builder<Task>
+     */
     public function scopeVisibleTo(Builder $query, User $user): Builder
     {
         return $query->where(fn (Builder $visible) => $visible

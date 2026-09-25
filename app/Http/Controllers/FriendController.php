@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Friendship;
-use App\Models\User;
-use App\Models\Task;
 use App\Models\PlannerGroup;
+use App\Models\Task;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -40,6 +40,7 @@ class FriendController extends Controller
             Friendship::create(['sender_id' => $request->user()->id, 'recipient_id' => $recipient->id]);
         }
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Friend request sent.']);
+
         return back();
     }
 
@@ -48,14 +49,16 @@ class FriendController extends Controller
         abort_unless($friendship->recipient_id === $request->user()->id && $friendship->status === 'pending', 403);
         $friendship->update(['status' => 'accepted']);
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Friend request accepted.']);
+
         return back();
     }
 
     public function destroy(Request $request, Friendship $friendship): RedirectResponse
     {
-        abort_unless(in_array($request->user()->id, [$friendship->sender_id, $friendship->recipient_id], true), 403);
+        abort_unless($request->user()->id === $friendship->sender_id || $request->user()->id === $friendship->recipient_id, 403);
         $friendship->delete();
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Friendship removed.']);
+
         return back();
     }
 
@@ -64,6 +67,7 @@ class FriendController extends Controller
         abort_unless($task->members()->whereKey($request->user()->id)->wherePivot('status', 'pending')->exists(), 403);
         $task->members()->updateExistingPivot($request->user()->id, ['status' => 'accepted']);
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Task invitation accepted.']);
+
         return back();
     }
 
@@ -72,6 +76,7 @@ class FriendController extends Controller
         abort_unless($task->members()->whereKey($request->user()->id)->wherePivot('status', 'pending')->exists(), 403);
         $task->members()->detach($request->user()->id);
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Task invitation declined.']);
+
         return back();
     }
 
@@ -80,6 +85,7 @@ class FriendController extends Controller
         abort_unless($group->members()->whereKey($request->user()->id)->wherePivot('status', 'pending')->exists(), 403);
         $group->members()->updateExistingPivot($request->user()->id, ['status' => 'accepted']);
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Group invitation accepted.']);
+
         return back();
     }
 
@@ -88,9 +94,11 @@ class FriendController extends Controller
         abort_unless($group->members()->whereKey($request->user()->id)->wherePivot('status', 'pending')->exists(), 403);
         $group->members()->updateExistingPivot($request->user()->id, ['status' => 'declined']);
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Group invitation declined.']);
+
         return back();
     }
 
+    /** @return array{id: int<0, max>, name: string, username: string|null} */
     private function person(User $user): array
     {
         return ['id' => $user->id, 'name' => $user->name, 'username' => $user->username];

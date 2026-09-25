@@ -28,6 +28,7 @@ class LeaderboardController extends Controller
         ]);
     }
 
+    /** @return array{id: int<0, max>, name: string, username: string|null, level: int, levelName: string, xp: int, streak: int, relationship: string} */
     private function entry(User $candidate, User $viewer): array
     {
         $progress = PlannerProgress::for($candidate);

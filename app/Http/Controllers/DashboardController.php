@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Friendship;
 use App\Models\PlannerGroup;
 use App\Models\Task;
+use App\Models\User;
 use App\Support\PlannerProgress;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -58,7 +60,7 @@ class DashboardController extends Controller
                 ->orderBy('name')
                 ->get(['id', 'name', 'color']),
             'tags' => $request->user()->tags()->orderBy('name')->get(['id', 'name']),
-            'friends' => \App\Models\User::query()->whereIn('id', \App\Models\Friendship::friendIdsFor($request->user()))->orderBy('name')->get(['id', 'name', 'username']),
+            'friends' => User::query()->whereIn('id', Friendship::friendIdsFor($request->user()))->orderBy('name')->get(['id', 'name', 'username']),
             'gamification' => PlannerProgress::for($request->user()),
         ]);
     }

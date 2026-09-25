@@ -50,5 +50,4 @@ class CategoryController extends Controller
     {
         abort_unless($category->user_id === $request->user()->id, 403);
     }
-
 }

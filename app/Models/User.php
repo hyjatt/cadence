@@ -17,9 +17,10 @@ use Laravel\Fortify\PasskeyAuthenticatable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 
 /**
- * @property int $id
+ * @property int<0, max> $id
  * @property string $name
  * @property string $email
+ * @property string|null $username
  * @property Carbon|null $email_verified_at
  * @property string $password
  * @property string|null $two_factor_secret
@@ -28,6 +29,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
  * @property string|null $remember_token
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property GroupMember $pivot
  */
 #[Fillable(['name', 'email', 'username', 'password'])]
 #[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
@@ -54,21 +56,25 @@ class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
         return $this->hasMany(Task::class);
     }
 
+    /** @return BelongsToMany<Task, $this> */
     public function sharedTasks(): BelongsToMany
     {
         return $this->belongsToMany(Task::class)->withPivot('status')->withTimestamps();
     }
 
+    /** @return HasMany<PlannerGroup, $this> */
     public function groups(): HasMany
     {
         return $this->hasMany(PlannerGroup::class);
     }
 
+    /** @return HasMany<XpEvent, $this> */
     public function xpEvents(): HasMany
     {
         return $this->hasMany(XpEvent::class);
     }
 
+    /** @return BelongsToMany<User, $this> */
     public function friends(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'friendships', 'sender_id', 'recipient_id')

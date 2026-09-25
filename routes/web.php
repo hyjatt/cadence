@@ -1,12 +1,12 @@
 <?php
 
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\TaskController;
-use App\Http\Controllers\TagController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FriendController;
-use App\Http\Controllers\LeaderboardController;
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\LeaderboardController;
+use App\Http\Controllers\TagController;
+use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
 
 Route::inertia('/', 'welcome')->name('home');

@@ -36,7 +36,9 @@ return new class extends Migration
             foreach ($sharedCategories as $category) {
                 $groupId = DB::table('groups')->insertGetId(['user_id' => $category->user_id, 'name' => $category->name, 'color' => $category->color, 'created_at' => now(), 'updated_at' => now()]);
                 $members = DB::table('category_user')->where('category_id', $category->id)->pluck('user_id');
-                foreach ($members as $memberId) DB::table('group_members')->insert(['group_id' => $groupId, 'user_id' => $memberId, 'role' => 'collaborator', 'status' => 'accepted', 'created_at' => now(), 'updated_at' => now()]);
+                foreach ($members as $memberId) {
+                    DB::table('group_members')->insert(['group_id' => $groupId, 'user_id' => $memberId, 'role' => 'collaborator', 'status' => 'accepted', 'created_at' => now(), 'updated_at' => now()]);
+                }
                 DB::table('tasks')->where('category_id', $category->id)->update(['group_id' => $groupId, 'category_id' => null]);
             }
             Schema::drop('category_user');

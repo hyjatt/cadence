@@ -2,6 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Friendship;
+use App\Models\PlannerGroup;
+use App\Models\Task;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -42,7 +45,7 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user(),
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
-            'social' => fn () => $request->user() ? ['pending_social_count' => \App\Models\Friendship::query()->where('recipient_id', $request->user()->id)->where('status', 'pending')->count() + \App\Models\Task::query()->whereHas('members', fn ($members) => $members->whereKey($request->user()->id)->where('task_user.status', 'pending'))->count() + \App\Models\PlannerGroup::query()->whereHas('members', fn ($members) => $members->whereKey($request->user()->id)->where('group_members.status', 'pending'))->count()] : ['pending_social_count' => 0],
+            'social' => fn () => $request->user() ? ['pending_social_count' => Friendship::query()->where('recipient_id', $request->user()->id)->where('status', 'pending')->count() + Task::query()->whereHas('members', fn ($members) => $members->whereKey($request->user()->id)->where('task_user.status', 'pending'))->count() + PlannerGroup::query()->whereHas('members', fn ($members) => $members->whereKey($request->user()->id)->where('group_members.status', 'pending'))->count()] : ['pending_social_count' => 0],
         ];
     }
 }
