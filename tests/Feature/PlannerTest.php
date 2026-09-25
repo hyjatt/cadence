@@ -119,11 +119,11 @@ class PlannerTest extends TestCase
         $task = Task::firstOrFail();
         $this->actingAs($friend)->patch("/invitations/tasks/{$task->id}/accept")->assertRedirect();
         $this->actingAs($friend)->patch("/tasks/{$task->id}/completion")->assertRedirect();
-        $this->assertSame(25, $owner->xpEvents()->sum('points'));
-        $this->assertSame(25, $friend->xpEvents()->sum('points'));
+        $this->assertSame(25, (int) $owner->xpEvents()->sum('points'));
+        $this->assertSame(25, (int) $friend->xpEvents()->sum('points'));
         $this->actingAs($friend)->patch("/tasks/{$task->id}/completion");
         $this->actingAs($friend)->patch("/tasks/{$task->id}/completion");
-        $this->assertSame(25, $friend->xpEvents()->sum('points'));
+        $this->assertSame(25, (int) $friend->xpEvents()->sum('points'));
     }
 
     public function test_every_user_appears_on_the_leaderboard_and_friend_requests_are_username_based(): void
